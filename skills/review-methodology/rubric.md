@@ -109,6 +109,7 @@ into the secondary score.
 Produced by `review-architecture`, verified by `review-evaluator`. The
 `architecture` object:
 
+```json
 {
   "summary": "one-paragraph overall architecture narrative",
   "arch_score": 0,
@@ -118,6 +119,7 @@ Produced by `review-architecture`, verified by `review-evaluator`. The
   ],
   "edges": [ { "from": "id-a", "to": "id-b", "label": "..." } ]
 }
+```
 
 `arch_score` and component `score` are integers 0–100 with the SAME anchors as
 above (90–100 exemplary; 70–89 solid; 40–69 noticeable structural problems;
@@ -126,4 +128,5 @@ above (90–100 exemplary; 70–89 solid; 40–69 noticeable structural problems
 `boundary: true` component is context only: `score`/`internal`/`rationale` are
 `null` and it is excluded from `arch_score`. The architecture axis is scored
 and reported entirely on its own — it is never averaged with `stack_score` or
-the code-quality mean. No fields beyond this object are added by this axis.
+the code-quality mean. If no verified `arch_score` is present, report `N/A`
+for this axis. No fields beyond this object are added by this axis.
