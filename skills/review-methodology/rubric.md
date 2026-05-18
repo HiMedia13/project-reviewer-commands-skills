@@ -86,8 +86,9 @@ Declared-only, no deep evidence → not `good`. No JSON fields are added by this
 
 ## Scoring formula (synthesis)
 
-Only rows with `verified == true` contribute. The two deliverables are scored
-on **separate axes — never average them together**:
+Only rows with `verified == true` contribute. The deliverables are scored on
+**separate axes — never average them together** (a third, independent
+**architecture** axis is defined in its own section below):
 
 **Primary (headline):** the project-level tech-stack-fit score is the verified
 `stack_score` (0–100), reported on its own as the headline. It is NEVER mixed
@@ -102,3 +103,27 @@ into the secondary score.
   averages. All three absent → `null`.
 - Round at both the per-criterion level and again at the overall level.
 - `techstack` is NOT a secondary criterion and never enters this mean.
+
+## Independent axis — architecture
+
+Produced by `review-architecture`, verified by `review-evaluator`. The
+`architecture` object:
+
+{
+  "summary": "one-paragraph overall architecture narrative",
+  "arch_score": 0,
+  "components": [
+    { "id": "short-ascii-id", "name": "...", "files": ["..."],
+      "internal": "...", "rationale": "...", "score": 0, "boundary": false }
+  ],
+  "edges": [ { "from": "id-a", "to": "id-b", "label": "..." } ]
+}
+
+`arch_score` and component `score` are integers 0–100 with the SAME anchors as
+above (90–100 exemplary; 70–89 solid; 40–69 noticeable structural problems;
+0–39 serious). A serious structural problem forces the score below 50.
+`arch_score` is a holistic judgment, NOT a mean of component scores. A
+`boundary: true` component is context only: `score`/`internal`/`rationale` are
+`null` and it is excluded from `arch_score`. The architecture axis is scored
+and reported entirely on its own — it is never averaged with `stack_score` or
+the code-quality mean. No fields beyond this object are added by this axis.
