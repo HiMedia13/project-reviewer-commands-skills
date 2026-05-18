@@ -31,7 +31,7 @@
   .b-hi { background: #d6f5d6; color: #1a6b1a; }
   .b-mid { background: #fff0cc; color: #8a5a00; }
   .b-lo { background: #ffe0e0; color: #b00020; }
-  .arch-detail { margin-top: 1rem; border: 1px solid #ddd; border-radius: 6px; padding: .75rem; }
+  .arch-detail { margin-top: 1rem; border: 1px solid #ddd; border-radius: 6px; padding: .75rem; overflow-wrap: anywhere; }
   .arch-detail h3 { margin: 0 0 .25rem; }
   .arch-detail .empty, .arch-cols .empty { color: #666; }
   svg.arch-edges { position: absolute; inset: 0; pointer-events: none; overflow: visible; }
@@ -97,6 +97,7 @@
         var nm=document.createElement('span'); nm.className='nm';
         nm.textContent=c.name||c.id; box.appendChild(nm);
         if(c.boundary){
+          box.tabIndex=-1;
           var bsp=document.createElement('span'); bsp.textContent='평가 제외';
           bsp.style.fontSize='12px'; box.appendChild(bsp);
         } else {
@@ -126,7 +127,7 @@
         svg.appendChild(ln);
       });
     }
-    layout(); window.addEventListener('resize',layout);
+    layout(); window.addEventListener('resize',layout); cols.addEventListener('scroll',layout);
     function reset(){ detail.textContent=''; var p=document.createElement('p'); p.className='empty'; p.textContent='박스를 클릭하세요.'; detail.appendChild(p); }
     function block(label,val){
       var p=document.createElement('p'); var b=document.createElement('strong');
