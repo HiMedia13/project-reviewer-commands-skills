@@ -19,6 +19,8 @@ Steps:
      pre-v0.4.0 file.
    - If none is found, STOP and tell the user clearly: "No prior review found
      in `<workdir>`. Run `/review-project` first." Do nothing else.
+   The stored object also carries an `architecture` object (English keys; `{}`
+   if the run produced none) used to re-render the diagram.
 2. Load `skills/review-methodology/report-template.html` from this plugin.
 3. Apply the scoring formula from `review-methodology` / `rubric.md` to the
    stored verified rows (only `verified == true` rows contribute).
@@ -37,11 +39,20 @@ Steps:
      `stack_score`); never blend the two.
    - `{{FINDINGS_BLOCKS}}`: one `<details>` per file/criterion row; each
      finding as a line with a `sev-<severity>` class.
+   - `{{ARCH_SUMMARY}}` `{{ARCH_SCORE}}` `{{ARCH_DATA_JSON}}` from the stored
+     `architecture` object: escaped `summary` (or `정보 없음`), `arch_score`
+     integer (or `N/A`), and `architecture` serialized as compact JSON with
+     every `<` replaced by the JSON unicode escape `\u003c` (a `<script>`
+     element is raw text, so HTML entities are not decoded there; `\u003c`
+     cannot form `</script>` and `JSON.parse` decodes it back to `<`), or `{}`
+     if absent. This token is JSON for `JSON.parse(textContent)`, NOT
+     HTML — do not HTML-escape it; the report JS renders fields via
+     `textContent`. Zero-LLM (re-render only).
    Apply the Localization display mapping from the review-methodology skill (enum/criterion/mode → Korean) for displayed cells; the stored last-review.json is unchanged (English tokens).
 5. Write the report next to the selected `last-review.json`
    (`<workdir>/<slug>/output/report-<timestamp>.html`, or
    `<workdir>/output/...` when a legacy flat file was used) and print its
    path plus a one-line Korean summary: 기술 스택 점수(stack_score) + 코드 품질
-   종합 (두 축 분리, 합산 금지).
+   종합 + 아키텍처 점수(arch_score) (세 축 분리, 합산 금지).
 
 Never dispatch a subagent. The only file written is the HTML report.
