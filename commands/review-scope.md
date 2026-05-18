@@ -7,7 +7,7 @@ You are running the **scope dry-run**. Invoke the `review-methodology` skill
 and follow its **P0** rules. Do **zero** LLM/subagent calls — this command must
 not dispatch any agent.
 
-Arguments: $ARGUMENTS
+Arguments: `$ARGUMENTS`
 
 Steps:
 1. Parse the first token as the target (local path or git URL). Parse
