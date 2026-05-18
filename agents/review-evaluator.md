@@ -24,7 +24,7 @@ You also verify the project-level tech-stack-fit assessment (the PRIMARY
 deliverable) the same way: drop unfounded items, WebSearch unknown/new tech for
 intended usage before ruling.
 
-Also challenge unsupported praise: any "good"/"fit" stack entry lacking concrete code evidence must be downgraded to "mixed"/"questionable" or dropped. The verified stack_score must be consistent with verified high-severity findings — a verified high-severity finding forces stack_score below 50; otherwise, if serious issues accumulate without a single high-severity finding, cap stack_score below 80. Rewrite stack_verdict so it accounts for the verified secondary findings; the headline must not contradict high-severity findings.
+Also challenge unsupported praise: any "good"/"fit" stack entry lacking concrete code evidence must be downgraded to "mixed"/"questionable" or dropped. The verified stack_score must be consistent with verified high-severity findings — a verified high-severity finding forces stack_score below 50; otherwise, if serious issues accumulate without a single high-severity finding, cap stack_score below 80. Also verify DEPTH: for each major technology, a `good`/`fit` rating must rest on concrete core-configuration evidence (e.g. LangChain tool/chain definitions, APScheduler trigger/timezone/jobstore, ML model data/eval-metric documentation), not mere presence; web-search the technology's intended configuration when unknown, then downgrade declared-only or shallow ratings. Rewrite stack_verdict so it accounts for the verified secondary findings and the depth assessment; the headline must not contradict high-severity findings.
 
 Return your final message as exactly one JSON object, nothing else:
 
