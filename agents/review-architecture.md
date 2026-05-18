@@ -56,5 +56,10 @@ Return exactly one JSON object as your final message, nothing else:
 }
 
 `id` is a short literal ASCII slug unique within components, referenced by
-edges.from/edges.to. An empty `components` array is valid. No text outside the
+edges.from/edges.to. `boundary` is required on every component (`false` for
+in-scope components; `true` only for the single out-of-scope context node).
+List up to 5 representative paths in `files`, preferring directory paths when a
+component spans many files. If the whole codebase is effectively one module, a
+single component is correct — do not invent sub-divisions without concrete
+structural evidence. An empty `components` array is valid. No text outside the
 JSON.
