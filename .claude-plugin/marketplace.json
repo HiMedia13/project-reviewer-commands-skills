@@ -1,0 +1,15 @@
+{
+  "name": "project-reviewer-marketplace",
+  "owner": { "name": "HiMedia13" },
+  "metadata": {
+    "description": "Self-hosted marketplace for the project-reviewer Claude Code plugin."
+  },
+  "plugins": [
+    {
+      "name": "project-reviewer",
+      "source": "./",
+      "description": "Qualitative multi-agent project review: project-level tech-stack-fit assessment (primary) plus per-file 4-criteria findings (secondary), rendered as a self-contained HTML report. Does not build/run/test code.",
+      "version": "0.1.0"
+    }
+  ]
+}
