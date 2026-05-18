@@ -51,7 +51,7 @@ project-reviewer-commands-skills/
     review-eng.md                   # model: haiku   · tools: Read, Glob, Grep
     review-deadcode.md              # model: haiku   · tools: Read, Glob, Grep
     review-techstack.md             # model: haiku   · tools: Read, Glob, Grep
-    review-evaluator.md             # model: sonnet  · tools: Read, WebSearch
+    review-evaluator.md             # model: sonnet  · tools: Read, Glob, Grep, WebSearch
   skills/review-methodology/
     SKILL.md                        # orchestration order, never-raise parsing
                                     #   contract, scoring formula, scope rule,
