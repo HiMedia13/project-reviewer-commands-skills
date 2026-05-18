@@ -83,8 +83,9 @@ target repo URL/path; `<workdir>` default `.reviewer`):
 - terminal summary in Korean — tech-stack-fit score (stack_score / 100) and
   verdict first; then code-quality scores for library / engineering / dead-code
   and their mean. The two axes are never combined.
-- `last-review.json` — latest run only (drives `/review-report` and
-  incremental re-runs); JSON keys/enums are English by design.
+- `last-review.json` — this repo's latest run only (per-slug; drives
+  `/review-report` and incremental re-runs); JSON keys/enums are English by
+  design.
 
 ## How it works
 
@@ -105,8 +106,8 @@ No automated harness (this is plugin config, not application code). Verify:
 3. `/review-project <small-repo> --max-files 1` → completes P0–P4, writes a self-contained HTML that opens with no external requests; terminal summary LEADS with the tech-stack-fit headline.
 4. `/review-project <repo> --max-files 0` → dry run, no subagents dispatched, empty report rendered.
 5. `/review-report` with no prior run → clear, actionable error.
-6. `/review-report` after a successful run → identical HTML re-rendered, zero LLM calls.
-7. `--with-frontend` flips frontend files into scope; backend files never excluded either way.
+6. `/review-report` after a run → re-renders that repo (bare command picks the most recently reviewed repo's `<workdir>/<slug>/last-review.json`; `/review-report <repo>` targets a specific one), zero LLM calls.
+7. Frontend exclusion is manifest-based by default (`package.json` / bundler signals); `--with-frontend` includes the frontend; backend/AI files (incl. `.ipynb`) are never excluded either way.
 
 ## Spec & plan
 
