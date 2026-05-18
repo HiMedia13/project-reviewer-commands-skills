@@ -58,6 +58,8 @@ Per-file finding row (one row per file per criterion):
 After verification, `review-evaluator` adds to each row:
 `"verified": true|false` and `"verify_note": "verification basis or web-search summary"`.
 
+`criterion_score` is an integer 0-100 (same scale as `stack_score`).
+
 ## Severity
 
 - `low` — minor, stylistic, low-impact.
