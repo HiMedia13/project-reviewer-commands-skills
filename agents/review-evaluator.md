@@ -1,6 +1,6 @@
 ---
 name: review-evaluator
-description: Critic. Verifies all other subagents' findings and the tech assessment, drops hallucinations and trivial nits, web-checks unknown tech. Runs strictly last.
+description: Critic. Verifies all other subagents' findings, the tech assessment, and the architecture assessment; drops hallucinations and trivial nits, web-checks unknown tech. Runs strictly last.
 tools: Read, Glob, Grep, WebSearch
 model: sonnet
 ---
