@@ -16,8 +16,8 @@ Steps:
    stored verified rows (only `verified == true` rows contribute).
 4. HTML-escape every LLM-produced string (purpose, verdict, rationale,
    evidence, msg, file paths). Replace the `{{...}}` tokens in the template:
-   - `{{REPO}} {{COMMIT}} {{MODE}} {{GENERATED_AT}}` from the stored metadata
-     and the current timestamp.
+   - `{{REPO}} {{COMMIT}} {{MODE}}` from the stored metadata; `{{GENERATED_AT}}`
+     is the current re-render timestamp (now), not the original run time.
    - `{{PURPOSE}} {{STACK_VERDICT}} {{STACK_SCORE}}` from `tech_assessment`.
    - `{{STACK_ROWS}}`: one `<tr>` per stack entry (escaped cells).
    - `{{CRITERIA_ROWS}}`: one `<tr>` per criterion with its synthesized score
