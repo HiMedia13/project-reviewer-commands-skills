@@ -1,6 +1,6 @@
 ---
 name: review-methodology
-description: Use when running a qualitative project review (scanner -> 4 agents in parallel: tech-stack + 3 per-file criteria -> evaluator) or rendering its HTML report. Holds the strict orchestration order, the never-raise parsing contract, the scoring formula, the scope/frontend rules, and the report template.
+description: Use when running a qualitative project review (scanner -> 5 agents in parallel: tech-stack + architecture + 3 per-file criteria -> evaluator) or rendering its HTML report. Holds the strict orchestration order, the never-raise parsing contract, the scoring formula, the scope/frontend rules, and the report template.
 ---
 
 # Review Methodology
@@ -23,11 +23,13 @@ It MUST follow this order exactly:
   frontend-exclusion rule, decide scope, apply `--max-files`, cost-guard.
 - **P1 — Scanner alone:** dispatch ONLY `review-scanner`. No other subagent in
   this phase.
-- **P2 — 4 criteria in parallel:** dispatch `review-library`, `review-eng`,
-  `review-deadcode`, `review-techstack` in a SINGLE message (same turn).
-  Never sequentially. Each receives the in-scope file list + scanner map.
-- **P3 — Evaluator last:** ONLY after all four return, dispatch
-  `review-evaluator` with all findings + the tech assessment.
+- **P2 — 5 agents in parallel:** dispatch `review-library`, `review-eng`,
+  `review-deadcode`, `review-techstack`, `review-architecture` in a SINGLE
+  message (same turn). Never sequentially. Each receives the in-scope file
+  list + scanner map.
+- **P3 — Evaluator last:** ONLY after all five return, dispatch
+  `review-evaluator` with all findings + the tech assessment + the architecture
+  object.
 - **P4 — Synthesize & render:** score, escape, fill the template, write
   outputs, print the terminal summary, persist `last-review.json`.
 
@@ -42,6 +44,9 @@ exactly:
 - A parsing failure must NEVER abort the whole review.
 - If `review-techstack`/`review-evaluator` yield no usable tech assessment,
   render the report with an empty stack section rather than failing.
+- If `review-architecture`/`review-evaluator` yield no usable architecture,
+  render the report with the architecture diagram showing "아키텍처 정보 없음"
+  rather than failing.
 - **Graceful interrupt:** if the user stops mid-run, render whatever was
   collected so far. No further subagent dispatch, no extra cost.
 - LLM output is untrusted: HTML-escape every LLM string before substituting it
@@ -119,7 +124,7 @@ The report and terminal summary are Korean. Rules:
 - **Free-text prose is Korean.** Agents write every human-readable free-text
   field in Korean: `purpose`, `rationale`, `evidence`, `msg`, `stack_verdict`,
   `verify_note`, `import_graph_summary`, and prose inside `stack`. Identifiers,
-  file paths, tech/library names, and code stay literal.
+  file paths, tech/library names, and code stay literal (architecture `summary`/`name`/`internal`/`rationale`/edge `label` are Korean too; component `id` and `boundary` stay literal English).
 - **Render-time display mapping.** When filling the template or printing the
   terminal summary, map enum/criterion/mode tokens to Korean for DISPLAY ONLY
   (the JSON persisted to `last-review.json` keeps English tokens):
@@ -139,6 +144,14 @@ low score (<50). The tech-stack-fit `stack_score` is the **headline** and is
 reported on its own. The **secondary** code-quality overall is the mean of the
 three per-file criteria (`library`, `eng`, `deadcode`) ONLY — never average
 `techstack`/`stack_score` into it; the two are separate axes.
+
+**Architecture (independent third axis).** The verified `arch_score` (0–100)
+is this axis's headline, reported on its own; per-component `score`s are
+listed. `arch_score` is the agent's holistic judgment (like `stack_score`),
+NOT a mean of component scores. It is NEVER averaged into the tech-stack or
+code-quality scores, nor they into it. `boundary` components carry no score and
+do not enter `arch_score`. If no verified `arch_score` exists the headline is
+`N/A`.
 
 **Depth requirement.** Tech-stack judgment is per-technology configuration
 correctness, not mere presence. For each major detected technology evaluate its
