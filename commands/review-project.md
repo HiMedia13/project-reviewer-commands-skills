@@ -59,7 +59,10 @@ usable tech assessment, proceed with an empty stack.
    scores, rounded again; see `rubric.md` for the full formula).
 3. HTML-escape every LLM string. Fill
    `skills/review-methodology/report-template.html` (token replacement as in
-   `/review-report` step 4; `{{GENERATED_AT}}` is the current timestamp).
+   `/review-report` step 4 — the same 11 tokens: `{{REPO}}` `{{COMMIT}}`
+   `{{MODE}}` `{{GENERATED_AT}}` `{{PURPOSE}}` `{{STACK_ROWS}}`
+   `{{STACK_VERDICT}}` `{{STACK_SCORE}}` `{{CRITERIA_ROWS}}` `{{OVERALL_SCORE}}`
+   `{{FINDINGS_BLOCKS}}`; `{{GENERATED_AT}}` is the current timestamp).
    Write `<workdir>/output/report-<timestamp>.html`.
 4. Print the terminal summary: LEAD with the tech-stack-fit headline
    (purpose, stack table, verdict, score), THEN the 4-criteria scores and
