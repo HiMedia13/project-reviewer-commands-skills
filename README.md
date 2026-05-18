@@ -111,5 +111,7 @@ No automated harness (this is plugin config, not application code). Verify:
 
 ## Spec & plan
 
-- Spec: `docs/superpowers/specs/2026-05-18-project-reviewer-plugin-design.md`
-- Plan: `docs/superpowers/plans/2026-05-18-project-reviewer-plugin.md`
+- v0.4.0 spec: `docs/superpowers/specs/2026-05-18-v0.4.0-isolation-frontend-depth-design.md`
+- v0.4.0 plan: `docs/superpowers/plans/2026-05-18-v0.4.0-isolation-frontend-depth.md`
+- Original spec: `docs/superpowers/specs/2026-05-18-project-reviewer-plugin-design.md`
+- Original plan: `docs/superpowers/plans/2026-05-18-project-reviewer-plugin.md`
