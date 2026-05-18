@@ -3,7 +3,7 @@ description: Re-render a stored review result to a fresh self-contained HTML rep
 argument-hint: [target] [--workdir DIR]
 ---
 
-You are re-rendering the latest stored review. Zero LLM/subagent calls.
+You are re-rendering a stored review (the given `target`'s, else the most recent). Zero LLM/subagent calls.
 
 Arguments: `$ARGUMENTS` (optional first positional `target` = the repo URL or
 local path that was reviewed; optional `--workdir DIR`, default `.reviewer`).
@@ -40,8 +40,8 @@ Steps:
    Apply the Localization display mapping from the review-methodology skill (enum/criterion/mode → Korean) for displayed cells; the stored last-review.json is unchanged (English tokens).
 5. Write the report next to the selected `last-review.json`
    (`<workdir>/<slug>/output/report-<timestamp>.html`, or
-   `<workdir>/output/...` when a legacy flat file was used) and print its path
-   plus a
-   one-line Korean summary: 기술 스택 점수(stack_score) + 코드 품질 종합 (두 축 분리, 합산 금지).
+   `<workdir>/output/...` when a legacy flat file was used) and print its
+   path plus a one-line Korean summary: 기술 스택 점수(stack_score) + 코드 품질
+   종합 (두 축 분리, 합산 금지).
 
 Never dispatch a subagent. The only file written is the HTML report.
