@@ -25,7 +25,8 @@ Steps:
    - `{{OVERALL_SCORE}}`: synthesized overall (`N/A` when null).
    - `{{FINDINGS_BLOCKS}}`: one `<details>` per file/criterion row; each
      finding as a line with a `sev-<severity>` class.
+   Apply the Localization display mapping from the review-methodology skill (enum/criterion/mode → Korean) for displayed cells; the stored last-review.json is unchanged (English tokens).
 5. Write `<workdir>/output/report-<timestamp>.html` and print its path plus a
-   one-line terminal summary (tech-stack headline + overall score).
+   one-line Korean terminal summary (기술 스택 헤드라인 + 종합 점수).
 
 Never dispatch a subagent. The only file written is the HTML report.

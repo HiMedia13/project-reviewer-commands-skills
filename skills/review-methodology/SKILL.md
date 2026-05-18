@@ -67,6 +67,30 @@ actually evaluated.
 - Backend-language files (`.py .go .rs .java .rb .php .cs .kt .scala ...`) are
   **never** excluded regardless of directory.
 
+## Localization (Korean output)
+
+The report and terminal summary are Korean. Rules:
+
+- **Stored JSON is English.** Agents keep all JSON field names and enum tokens
+  exactly as the English schema (`good|mixed|poor`, `fit|questionable|misfit`,
+  `low|medium|high`, criterion = `library|eng|deadcode|techstack`,
+  `mode` = `full|incremental`). Parsing, scoring, never-raise, and incremental
+  reuse all depend on these literal tokens — never localize them in JSON.
+- **Free-text prose is Korean.** Agents write every human-readable free-text
+  field in Korean: `purpose`, `rationale`, `evidence`, `msg`, `stack_verdict`,
+  `verify_note`, `import_graph_summary`, and prose inside `stack`. Identifiers,
+  file paths, tech/library names, and code stay literal.
+- **Render-time display mapping.** When filling the template or printing the
+  terminal summary, map enum/criterion/mode tokens to Korean for DISPLAY ONLY
+  (the JSON persisted to `last-review.json` keeps English tokens):
+  - used_well: good→양호, mixed→혼재, poor→미흡
+  - purpose_fit: fit→적합, questionable→의문, misfit→부적합
+  - severity: low→낮음, medium→중간, high→높음
+  - mode: full→전체, incremental→증분
+  - criterion: library→라이브러리 사용, eng→엔지니어링 적정성, deadcode→데드코드, techstack→기술 스택
+  The `sev-<severity>` CSS class still uses the English token (low/medium/high);
+  only the visible severity text is Korean.
+
 ## Scoring
 
 Use the formula in `rubric.md`. Only `verified == true` rows contribute.

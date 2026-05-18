@@ -63,10 +63,9 @@ usable tech assessment, proceed with an empty stack.
    `{{MODE}}` `{{GENERATED_AT}}` `{{PURPOSE}}` `{{STACK_ROWS}}`
    `{{STACK_VERDICT}}` `{{STACK_SCORE}}` `{{CRITERIA_ROWS}}` `{{OVERALL_SCORE}}`
    `{{FINDINGS_BLOCKS}}`; `{{GENERATED_AT}}` is the current timestamp).
+   Apply the Localization display mapping from the review-methodology skill (enum/criterion/mode tokens → Korean) when building the cells; the persisted JSON keeps English tokens.
    Write `<workdir>/output/report-<timestamp>.html`.
-4. Print the terminal summary: LEAD with the tech-stack-fit headline
-   (purpose, stack table, verdict, score), THEN the 4-criteria scores and
-   overall.
+4. 터미널 요약을 한국어로 출력: 먼저 기술 스택 적합성 헤드라인(목적, 스택 표, 종합 verdict, 점수), 그다음 4기준 점수와 종합 점수. enum/criterion/mode는 위 매핑대로 한국어로 표기.
 5. Persist `<workdir>/last-review.json`: `{repo, commit, mode,
    generated_at, findings:[verified rows], tech_assessment}` — latest run
    only, overwrite (no cumulative DB).
