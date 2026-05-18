@@ -10,7 +10,7 @@ fits the project's purpose.
 - `/review-project <path|repo-url> [--max-files N] [--with-frontend] [--force] [--workdir DIR]`
   Full pipeline: scanner → 4 criteria in parallel → evaluator → HTML report +
   terminal summary. Spends LLM tokens.
-- `/review-scope <path> [--with-frontend] [--max-files N]`
+- `/review-scope <path|repo-url> [--with-frontend] [--max-files N]`
   Cost-free dry run: what would be evaluated and the full/incremental decision.
 - `/review-report [--workdir DIR]`
   Cost-free: re-render the most recent result to a fresh HTML report.
@@ -18,7 +18,7 @@ fits the project's purpose.
 ## How it works
 
 The primary deliverable is a project-level tech-stack-fit assessment; per-file
-4-criteria findings (`library`, `eng`, `deadcode`) are secondary. Model
+findings (`library`, `eng`, `deadcode`) are secondary. Model
 mapping: scanner + 4 criteria on `haiku` (cheap bulk), evaluator on `sonnet`
 (verifies the primary deliverable). Results persist as `<workdir>/last-review.json`
 (latest run only) and `<workdir>/output/report-<ts>.html`. Default workdir
