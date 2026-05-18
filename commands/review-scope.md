@@ -24,10 +24,10 @@ Steps:
    (primary) with the legacy ext/dir heuristic as fallback; respect
    `--with-frontend`. Backend / AI language files (incl. `.ipynb`) are never
    excluded.
-5. Decide scope: `full` if no `<workdir>/<slug>/last-review.json` or its
-   stored `repo` differs from the target, else `incremental` per the skill's
-   scope rule (changed-since-prior-SHA + reverse-import expansion). If git diff
-   cannot be computed, fall back to `full`.
+5. Decide scope: `full` if there is no `<workdir>/<slug>/last-review.json`,
+   its stored `repo` field does not match the resolved target, or the git
+   diff cannot be computed; else `incremental` per the skill's scope rule
+   (changed-since-prior-SHA + reverse-import expansion).
 6. Apply the `--max-files N` cap (N=0 ⇒ "dry run, nothing would be evaluated").
 7. Print a concise report ONLY (no files written):
    - target, slug, resolved per-repo workdir `<workdir>/<slug>/`
