@@ -5,6 +5,39 @@ methodology natively (no Python app). It does **not** build/run/test code — it
 asks what tech was used, whether each tech was used as designed, and whether it
 fits the project's purpose.
 
+> **v0.2.0** — report and terminal output are in Korean (stored JSON stays
+> English for parsing/scoring stability).
+
+## Installation
+
+This repo is a self-hosted Claude Code plugin marketplace (not a public
+registry — only people who know the repo can install it; visibility follows
+the GitHub repo's visibility).
+
+In a Claude Code session:
+
+```
+/plugin marketplace add HiMedia13/project-reviewer-commands-skills
+/plugin install project-reviewer
+/reload-plugins
+```
+
+Local checkout instead of GitHub:
+
+```
+/plugin marketplace add D:\dev\project-reviewer-commands-skills
+/plugin install project-reviewer
+/reload-plugins
+```
+
+**Updating to a newer version** (the installed copy does not auto-update):
+
+```
+/plugin marketplace update project-reviewer-marketplace
+/plugin update project-reviewer
+/reload-plugins
+```
+
 ## Commands
 
 - `/review-project <path|repo-url> [--max-files N] [--with-frontend] [--force] [--workdir DIR]`
@@ -14,6 +47,31 @@ fits the project's purpose.
   Cost-free dry run: what would be evaluated and the full/incremental decision.
 - `/review-report [--workdir DIR]`
   Cost-free: re-render the most recent result to a fresh HTML report.
+
+## Usage
+
+Recommended first run (check cost before spending tokens):
+
+```
+/review-scope D:\path\to\repo                  # 0-cost: preview what gets evaluated
+/review-project D:\path\to\repo --max-files 1  # low-cost: validate the pipeline
+/review-project D:\path\to\repo                # full qualitative review
+/review-report                                 # 0-cost: re-render last result
+```
+
+Flags: `--with-frontend` (include UI files; backend files are never excluded
+either way) · `--force` (ignore cache, full re-eval) · `--max-files N`
+(cap evaluated files; `0` = dry run) · `--workdir DIR` (work dir, default
+`.reviewer`).
+
+Outputs (under the target's `<workdir>`, default `.reviewer`):
+
+- `output/report-<ts>.html` — self-contained Korean HTML report (no external
+  requests), leading with the tech-stack-fit assessment.
+- terminal summary in Korean — tech-stack-fit headline first, then the
+  4-criteria scores and overall.
+- `last-review.json` — latest run only (drives `/review-report` and
+  incremental re-runs); JSON keys/enums are English by design.
 
 ## How it works
 
