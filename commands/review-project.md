@@ -26,7 +26,9 @@ Arguments: `$ARGUMENTS`
    (changed-since-prior-SHA + reverse-import expansion); the rest are `cached`.
 6. Apply `--max-files N` (0 ⇒ evaluate nothing). If the in-scope set is large,
    print the count and ask the user to confirm before proceeding.
-7. If the in-scope set is empty, skip P1–P3 and render an empty report in P4.
+7. Write the resolved scope to `<workdir>/scope.json` (in-scope list, mode,
+   frontend-excluded count) for observability.
+8. If the in-scope set is empty, skip P1–P3 and render an empty report in P4.
 
 ## P1 — Scanner alone
 Dispatch ONLY the `review-scanner` agent (Task tool), passing the in-scope file
@@ -43,15 +45,18 @@ verified rows from `last-review.json` forward unchanged. Parse each result with
 the never-raise contract (any failure ⇒ empty rows for that criterion).
 
 ## P3 — Evaluator last
-ONLY after all four return, dispatch `review-evaluator` once with: all per-file
-findings and the techstack `tech_assessment`. Parse its JSON (verified findings
+ONLY after all four return, dispatch `review-evaluator` once with: all
+newly-evaluated per-file findings (NOT cached rows — those merge in P4 step 1)
+and the techstack `tech_assessment`. Parse its JSON (verified findings
 + verified `tech_assessment`) with the never-raise contract. If it yields no
 usable tech assessment, proceed with an empty stack.
 
 ## P4 — Synthesize & render
 1. Merge evaluator-verified rows with carried-forward cached rows.
 2. Score using the `rubric.md` formula (only `verified == true` contributes;
-   `techstack` per-criterion score = verified `stack_score`).
+   `techstack` per-criterion score = verified `stack_score`; a criterion with
+   no verified rows is null; overall = mean of present per-criterion rounded
+   scores, rounded again; see `rubric.md` for the full formula).
 3. HTML-escape every LLM string. Fill
    `skills/review-methodology/report-template.html` (token replacement as in
    `/review-report` step 4; `{{GENERATED_AT}}` is the current timestamp).
@@ -59,7 +64,7 @@ usable tech assessment, proceed with an empty stack.
 4. Print the terminal summary: LEAD with the tech-stack-fit headline
    (purpose, stack table, verdict, score), THEN the 4-criteria scores and
    overall.
-5. Persist `<workdir>/last-review.json`: `{repo, commit_sha, mode,
+5. Persist `<workdir>/last-review.json`: `{repo, commit, mode,
    generated_at, findings:[verified rows], tech_assessment}` — latest run
    only, overwrite (no cumulative DB).
 
