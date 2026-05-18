@@ -8,7 +8,7 @@
     {
       "name": "project-reviewer",
       "source": "./",
-      "description": "Qualitative multi-agent project review: project-level tech-stack-fit assessment with per-technology depth (primary) plus per-file 3-criteria findings (secondary), rendered as a self-contained HTML report. Default scope is backend + AI; frontend is opt-in. Per-target isolation. Does not build/run/test code.",
+      "description": "Qualitative multi-agent project review: project-level tech-stack-fit assessment with per-technology depth (primary) plus per-file 3-criteria findings (secondary), rendered as a self-contained HTML report. Reviews backend + AI files by default; frontend is opt-in. Each reviewed repo gets its own output folder. Does not build/run/test code.",
       "version": "0.4.0"
     }
   ]
