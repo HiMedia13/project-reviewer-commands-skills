@@ -72,9 +72,10 @@ not default to high scores — justify the score from the findings.
 configuration correctness, not presence. Examples: LangChain/agent frameworks →
 are tools/chains/agents defined with proper schemas and output parsing;
 APScheduler/schedulers → job/trigger definitions, timezone, misfire/coalesce,
-jobstore; ML/AI models → training-data provenance, evaluation metrics and their
-meaning, train/serve separation — only when documented in the repo; if absent,
-say "근거 없음", neither fabricate nor over-penalize beyond "undocumented".
+jobstore; ML/AI models (assess only what the repo documents) → training-data
+provenance, evaluation metrics and their meaning, train/serve separation; for
+any of these not documented, say "근거 없음" and neither fabricate nor
+over-penalize beyond "undocumented".
 Declared-only, no deep evidence → not `good`. No JSON fields are added by this.
 
 ## Severity
