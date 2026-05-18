@@ -1,6 +1,6 @@
 {
   "name": "project-reviewer",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Qualitative multi-agent project review: project-level tech-stack-fit assessment (primary) plus per-file 4-criteria findings (secondary), rendered as a self-contained HTML report. Does not build/run/test code.",
   "author": { "name": "HiMedia13" },
   "homepage": "https://github.com/HiMedia13/project-reviewer-commands-skills",

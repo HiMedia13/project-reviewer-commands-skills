@@ -53,10 +53,13 @@ usable tech assessment, proceed with an empty stack.
 
 ## P4 — Synthesize & render
 1. Merge evaluator-verified rows with carried-forward cached rows.
-2. Score using the `rubric.md` formula (only `verified == true` contributes;
-   `techstack` per-criterion score = verified `stack_score`; a criterion with
-   no verified rows is null; overall = mean of present per-criterion rounded
-   scores, rounded again; see `rubric.md` for the full formula).
+2. Score per `rubric.md` (only `verified == true`; 0–100 higher=better; a
+   verified high-severity finding forces <50). Compute on TWO SEPARATE AXES:
+   (a) primary headline = verified `stack_score` (0–100), reported on its own;
+   (b) secondary code-quality overall = mean of the present rounded
+   per-criterion means over `library`/`eng`/`deadcode` ONLY (criterion → null
+   if no verified rows; round twice). NEVER average `techstack`/`stack_score`
+   into the secondary overall.
 3. HTML-escape every LLM string. Fill
    `skills/review-methodology/report-template.html` (token replacement as in
    `/review-report` step 4 — the same 11 tokens: `{{REPO}}` `{{COMMIT}}`
@@ -65,7 +68,11 @@ usable tech assessment, proceed with an empty stack.
    `{{FINDINGS_BLOCKS}}`; `{{GENERATED_AT}}` is the current timestamp).
    Apply the Localization display mapping from the review-methodology skill (enum/criterion/mode tokens → Korean) when building the cells; the persisted JSON keeps English tokens.
    Write `<workdir>/output/report-<timestamp>.html`.
-4. 터미널 요약을 한국어로 출력: 먼저 기술 스택 적합성 헤드라인(목적, 스택 표, 종합 verdict, 점수), 그다음 4기준 점수와 종합 점수. enum/criterion/mode는 위 매핑대로 한국어로 표기.
+4. 터미널 요약을 한국어로 출력(두 축 분리): 먼저 기술 스택 적합성 헤드라인
+   = stack_score(0~100) + 핵심 verdict + 스택 표 요약. 그다음 코드 품질:
+   라이브러리/엔지니어링/데드코드 점수와 코드 품질 종합(3기준 평균, 0~100).
+   두 점수를 하나로 합치지 말 것. enum/criterion/mode는 Localization 매핑대로
+   한국어 표기.
 5. Persist `<workdir>/last-review.json`: `{repo, commit, mode,
    generated_at, findings:[verified rows], tech_assessment}` — latest run
    only, overwrite (no cumulative DB).

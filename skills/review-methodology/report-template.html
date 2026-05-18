@@ -8,8 +8,9 @@
   body { font: 15px/1.5 system-ui, sans-serif; margin: 2rem auto; max-width: 60rem; padding: 0 1rem; }
   h1, h2 { line-height: 1.2; }
   .meta { color: #666; font-size: 13px; }
+  .tablewrap { overflow-x: auto; }
   table { border-collapse: collapse; width: 100%; margin: 1rem 0; }
-  th, td { border: 1px solid #ccc; padding: 6px 9px; text-align: left; vertical-align: top; }
+  th, td { border: 1px solid #ccc; padding: 6px 9px; text-align: left; vertical-align: top; overflow-wrap: anywhere; word-break: break-word; }
   th { background: #f2f2f2; }
   .headline { background: #eef6ff; border: 1px solid #b9d8ff; padding: 1rem; border-radius: 6px; }
   .score { font-weight: 700; }
@@ -18,7 +19,7 @@
   .sev-low { color: #555; }
   details { border: 1px solid #ddd; border-radius: 6px; margin: .5rem 0; padding: .5rem .75rem; }
   summary { cursor: pointer; font-weight: 600; }
-  code { background: #f4f4f4; padding: 0 4px; border-radius: 3px; }
+  code { background: #f4f4f4; padding: 0 4px; border-radius: 3px; overflow-wrap: anywhere; white-space: pre-wrap; }
 </style>
 </head>
 <body>
@@ -28,20 +29,25 @@
 <section class="headline">
   <h2>기술 스택 적합성 (핵심)</h2>
   <p><strong>목적:</strong> {{PURPOSE}}</p>
+  <div class="tablewrap">
   <table>
     <thead><tr><th>기술</th><th>역할</th><th>의도대로</th><th>목적 적합성</th><th>근거</th><th>증거</th></tr></thead>
     <tbody>{{STACK_ROWS}}</tbody>
   </table>
-  <p class="score">종합: {{STACK_VERDICT}} — 점수: {{STACK_SCORE}}</p>
+  </div>
+  <p class="score">기술 스택 종합: {{STACK_VERDICT}} — 점수: {{STACK_SCORE}} / 100</p>
 </section>
 
 <section>
-  <h2>점수 (보조)</h2>
+  <h2>코드 품질 (보조)</h2>
+  <p class="meta">파일별 3기준(라이브러리 사용 · 엔지니어링 적정성 · 데드코드). 기술 스택 점수와 별개 축이며 합산하지 않음.</p>
+  <div class="tablewrap">
   <table>
     <thead><tr><th>기준</th><th>점수</th></tr></thead>
     <tbody>{{CRITERIA_ROWS}}</tbody>
   </table>
-  <p class="score">종합 점수: {{OVERALL_SCORE}}</p>
+  </div>
+  <p class="score">코드 품질 종합 (라이브러리·엔지니어링·데드코드): {{OVERALL_SCORE}} / 100</p>
 </section>
 
 <section>

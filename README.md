@@ -5,8 +5,10 @@ methodology natively (no Python app). It does **not** build/run/test code — it
 asks what tech was used, whether each tech was used as designed, and whether it
 fits the project's purpose.
 
-> **v0.2.0** — report and terminal output are in Korean (stored JSON stays
-> English for parsing/scoring stability).
+> **v0.3.0** — fixed the 0–100 score scale and separated the tech-stack score
+> (headline) from the code-quality score (3 criteria) so they are no longer
+> averaged together; stricter evidence-based tech-stack judgment; report table
+> no longer overflows. (v0.2.0: Korean output; stored JSON stays English.)
 
 ## Installation
 

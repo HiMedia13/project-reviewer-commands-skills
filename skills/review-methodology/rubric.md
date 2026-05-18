@@ -28,7 +28,7 @@ passes tests. It evaluates intent and fit.
 
 `stack_score` is an integer 0-100. An empty `stack` is valid.
 
-## Secondary deliverable — per-file 4-criteria findings
+## Secondary deliverable — per-file findings (3 criteria)
 
 Three per-file criteria: `library`, `eng`, `deadcode`. (`techstack` is the
 project-level criterion above, not per-file.)
@@ -58,7 +58,15 @@ Per-file finding row (one row per file per criterion):
 After verification, `review-evaluator` adds to each row:
 `"verified": true|false` and `"verify_note": "verification basis or web-search summary"`.
 
-`criterion_score` is an integer 0-100 (same scale as `stack_score`).
+`criterion_score` and `stack_score` are integers **0–100, higher = better**:
+
+- 90–100: exemplary — idiomatic, well-suited, no real concerns.
+- 70–89: solid, with minor improvement points.
+- 40–69: noticeable problems (medium-severity misuse / structural issues).
+- 0–39: serious misuse or structural problems (high-severity findings).
+
+A file or tech with a verified high-severity finding MUST score below 50. Do
+not default to high scores — justify the score from the findings.
 
 ## Severity
 
@@ -68,12 +76,19 @@ After verification, `review-evaluator` adds to each row:
 
 ## Scoring formula (synthesis)
 
-Only rows with `verified == true` contribute.
+Only rows with `verified == true` contribute. The two deliverables are scored
+on **separate axes — never average them together**:
 
-- Per-criterion score = mean of `criterion_score` over verified rows for that
-  criterion. If no verified rows for a criterion → `null`.
-- Overall score = mean of the **rounded** per-criterion averages that are
-  present. If all criteria absent → `null`.
+**Primary (headline):** the project-level tech-stack-fit score is the verified
+`stack_score` (0–100), reported on its own as the headline. It is NEVER mixed
+into the secondary score.
+
+**Secondary (code quality):** over the three per-file criteria ONLY —
+`library`, `eng`, `deadcode`:
+
+- Per-criterion score = mean of `criterion_score` over that criterion's
+  verified rows. No verified rows for a criterion → `null`.
+- Code-quality overall = mean of the present per-criterion **rounded**
+  averages. All three absent → `null`.
 - Round at both the per-criterion level and again at the overall level.
-- Criteria set for synthesis: `library`, `eng`, `deadcode`, `techstack`
-  (`techstack` per-criterion score comes from the verified `stack_score`).
+- `techstack` is NOT a secondary criterion and never enters this mean.

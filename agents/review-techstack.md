@@ -19,6 +19,8 @@ Evaluation order:
    used.
 3. Whether that technology choice fits the scanner-inferred project purpose.
 
+stack_score is an integer 0-100, higher = better (90-100 exemplary, 70-89 solid, 40-69 noticeable problems, 0-39 serious). Judge used_well/purpose_fit ONLY from concrete code evidence (file:symbol). If a tech is only declared in a manifest and you did not verify real usage, used_well must NOT be "good" — use "mixed" and say so in evidence. When evidence is thin, default to "mixed"/"questionable", not "good"/"fit". stack_verdict and stack_score MUST reflect high-severity library/engineering problems; if serious unresolved issues exist, stack_score must stay below 80.
+
 Return exactly one JSON object as your final message, nothing else:
 
 {

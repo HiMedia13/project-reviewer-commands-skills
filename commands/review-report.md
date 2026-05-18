@@ -20,13 +20,17 @@ Steps:
      is the current re-render timestamp (now), not the original run time.
    - `{{PURPOSE}} {{STACK_VERDICT}} {{STACK_SCORE}}` from `tech_assessment`.
    - `{{STACK_ROWS}}`: one `<tr>` per stack entry (escaped cells).
-   - `{{CRITERIA_ROWS}}`: one `<tr>` per criterion with its synthesized score
+   - `{{CRITERIA_ROWS}}`: one `<tr>` per per-file criterion — `library`,
+     `eng`, `deadcode` ONLY (NOT `techstack`) — with its synthesized score
      (`—` when null).
-   - `{{OVERALL_SCORE}}`: synthesized overall (`N/A` when null).
+   - `{{OVERALL_SCORE}}`: secondary code-quality overall = mean of the present
+     rounded `library`/`eng`/`deadcode` per-criterion scores (`N/A` when null).
+     `{{STACK_SCORE}}` is the separate primary headline (verified
+     `stack_score`); never blend the two.
    - `{{FINDINGS_BLOCKS}}`: one `<details>` per file/criterion row; each
      finding as a line with a `sev-<severity>` class.
    Apply the Localization display mapping from the review-methodology skill (enum/criterion/mode → Korean) for displayed cells; the stored last-review.json is unchanged (English tokens).
 5. Write `<workdir>/output/report-<timestamp>.html` and print its path plus a
-   one-line Korean terminal summary (기술 스택 헤드라인 + 종합 점수).
+   one-line Korean summary: 기술 스택 점수(stack_score) + 코드 품질 종합 (두 축 분리, 합산 금지).
 
 Never dispatch a subagent. The only file written is the HTML report.

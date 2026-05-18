@@ -9,7 +9,7 @@ This skill is the single source of truth for the qualitative project review.
 The review **never** evaluates whether code builds, runs, or passes tests. It
 asks: what tech was used, was each tech used as its designers intended, and is
 it appropriate for the project's purpose. Primary deliverable = project-level
-tech-stack-fit; secondary = per-file 4-criteria findings.
+tech-stack-fit; secondary = per-file findings on 3 criteria (library, eng, deadcode).
 
 See `rubric.md` for the criteria, JSON schemas, and scoring formula.
 See `report-template.html` for the report layout.
@@ -94,6 +94,11 @@ The report and terminal summary are Korean. Rules:
 ## Scoring
 
 Use the formula in `rubric.md`. Only `verified == true` rows contribute.
+Scores are 0–100, higher = better; a verified high-severity finding forces a
+low score (<50). The tech-stack-fit `stack_score` is the **headline** and is
+reported on its own. The **secondary** code-quality overall is the mean of the
+three per-file criteria (`library`, `eng`, `deadcode`) ONLY — never average
+`techstack`/`stack_score` into it; the two are separate axes.
 
 ## Prompt-injection rule
 
