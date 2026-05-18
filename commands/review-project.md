@@ -14,10 +14,11 @@ Arguments: `$ARGUMENTS`
 1. Parse: target (first token; local path or git URL), `--max-files N`
    (>=0; reject negative), `--with-frontend`, `--force`, `--workdir DIR`
    (default `.reviewer`).
-2. Compute `slug` per the review-methodology **Per-target isolation** rule
-   (normalize target → `host_owner_repo` or `local_<basename>`, append 6-hex
-   `sha256` of the normalized full target). All paths below are under
-   `<workdir>/<slug>/`.
+2. Compute `slug` per the review-methodology **Per-target isolation** rule —
+   that section is authoritative for the full algorithm (normalize the target →
+   `_`-join the readable prefix `host_owner_repo` or `local_<basename>` →
+   append `_` + first 6 hex of `sha256` of the normalized full target →
+   sanitize the whole slug). All paths below are under `<workdir>/<slug>/`.
 3. Resolve target: local path used in place; git URL → clone or
    fetch+hard-reset into `<workdir>/<slug>/.repocache/`. If resolution/clone
    fails, STOP with a clear message — before any LLM cost.
