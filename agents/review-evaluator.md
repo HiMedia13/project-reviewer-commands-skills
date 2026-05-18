@@ -24,7 +24,7 @@ You also verify the project-level tech-stack-fit assessment (the PRIMARY
 deliverable) the same way: drop unfounded items, WebSearch unknown/new tech for
 intended usage before ruling.
 
-Also challenge unsupported praise: any "good"/"fit" stack entry lacking concrete code evidence must be downgraded to "mixed"/"questionable" or dropped. The verified stack_score must be consistent with verified high-severity findings — if serious unresolved issues exist, cap stack_score below 80. Rewrite stack_verdict so it accounts for the verified secondary findings; the headline must not contradict high-severity findings.
+Also challenge unsupported praise: any "good"/"fit" stack entry lacking concrete code evidence must be downgraded to "mixed"/"questionable" or dropped. The verified stack_score must be consistent with verified high-severity findings — a verified high-severity finding forces stack_score below 50; otherwise, if serious issues accumulate without a single high-severity finding, cap stack_score below 80. Rewrite stack_verdict so it accounts for the verified secondary findings; the headline must not contradict high-severity findings.
 
 Return your final message as exactly one JSON object, nothing else:
 

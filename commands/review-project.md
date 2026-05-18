@@ -1,5 +1,5 @@
 ---
-description: Qualitative multi-agent project review — scanner then 4 criteria in parallel then evaluator — producing a project-level tech-stack-fit assessment plus per-file findings and a self-contained HTML report. Does not build/run/test code.
+description: Qualitative multi-agent project review — scanner then 4 agents in parallel (tech-stack + 3 per-file criteria) then evaluator — producing a project-level tech-stack-fit assessment plus per-file findings and a self-contained HTML report. Does not build/run/test code.
 argument-hint: <path|repo-url> [--max-files N] [--with-frontend] [--force] [--workdir DIR]
 ---
 

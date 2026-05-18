@@ -1,6 +1,6 @@
 ---
 name: review-methodology
-description: Use when running a qualitative project review (scanner -> 4 criteria in parallel -> evaluator) or rendering its HTML report. Holds the strict orchestration order, the never-raise parsing contract, the scoring formula, the scope/frontend rules, and the report template.
+description: Use when running a qualitative project review (scanner -> 4 agents in parallel: tech-stack + 3 per-file criteria -> evaluator) or rendering its HTML report. Holds the strict orchestration order, the never-raise parsing contract, the scoring formula, the scope/frontend rules, and the report template.
 ---
 
 # Review Methodology

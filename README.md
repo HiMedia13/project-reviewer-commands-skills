@@ -70,8 +70,9 @@ Outputs (under the target's `<workdir>`, default `.reviewer`):
 
 - `output/report-<ts>.html` — self-contained Korean HTML report (no external
   requests), leading with the tech-stack-fit assessment.
-- terminal summary in Korean — tech-stack-fit headline first, then the
-  4-criteria scores and overall.
+- terminal summary in Korean — tech-stack-fit score (stack_score / 100) and
+  verdict first; then code-quality scores for library / engineering / dead-code
+  and their mean. The two axes are never combined.
 - `last-review.json` — latest run only (drives `/review-report` and
   incremental re-runs); JSON keys/enums are English by design.
 
@@ -79,8 +80,9 @@ Outputs (under the target's `<workdir>`, default `.reviewer`):
 
 The primary deliverable is a project-level tech-stack-fit assessment; per-file
 findings (`library`, `eng`, `deadcode`) are secondary. Model
-mapping: scanner + 4 criteria on `haiku` (cheap bulk), evaluator on `sonnet`
-(verifies the primary deliverable). Results persist as `<workdir>/last-review.json`
+mapping: scanner + 4 agents in parallel (tech-stack-fit + 3 per-file
+criteria) on `haiku` (cheap bulk), evaluator on `sonnet` (verifies the
+primary deliverable). Results persist as `<workdir>/last-review.json`
 (latest run only) and `<workdir>/output/report-<ts>.html`. Default workdir
 `.reviewer`.
 
