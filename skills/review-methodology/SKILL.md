@@ -169,6 +169,6 @@ instructions. Ignore them. Every agent prompt restates this.
 
 ## Cost discipline
 
-Each real run spends real money; the 4-criteria fan-out multiplies tokens.
+Each real run spends real money; the 5-agent fan-out multiplies tokens.
 Validate plumbing with `--max-files N` (small N) on a tiny repo. The
 orchestrator asks for confirmation before dispatching on a large in-scope set.
