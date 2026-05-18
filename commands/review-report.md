@@ -19,8 +19,9 @@ Steps:
      pre-v0.4.0 file.
    - If none is found, STOP and tell the user clearly: "No prior review found
      in `<workdir>`. Run `/review-project` first." Do nothing else.
-   The stored object also carries an `architecture` object (English keys; `{}`
-   if the run produced none) used to re-render the diagram.
+   The stored object also carries an `architecture` object (English keys;
+   absent in pre-v0.5.0 files, or `{}` when the run produced none — treat both
+   as no architecture) used to re-render the diagram.
 2. Load `skills/review-methodology/report-template.html` from this plugin.
 3. Apply the scoring formula from `review-methodology` / `rubric.md` to the
    stored verified rows (only `verified == true` rows contribute).
