@@ -67,9 +67,13 @@ from the same `<workdir>` never collide. Computed in P0, zero LLM:
   `ssh://…`) → `host_owner_repo` (e.g. `github.com_Owner_Repo`).
 - Local path → `local_<basename>` (final path segment).
 - Suffix = first 6 lowercase hex of `sha256(normalized full target string)`.
-- `slug` = `<sanitized>_<hash6>`; sanitize replaces any char outside
-  `[A-Za-z0-9._-]` with `-` and collapses `-` runs. The full-target hash means
-  two distinct sources never share a folder even if the readable part matches.
+- Build the readable prefix by joining the components with `_`: for a git URL
+  `host_owner_repo` (the URL `/` between owner and repo becomes `_`); for a
+  local path `local_<basename>`. Then `slug` = `<prefix>_<hash6>`, and sanitize
+  the whole slug by replacing any char still outside `[A-Za-z0-9._-]` with `-`
+  and collapsing `-` runs (the `_` join separators are inside the allowed set
+  and are preserved). The full-target hash means two distinct sources never
+  share a folder even if the readable part matches.
 
 Layout — everything under `<workdir>/<slug>/`:
 `last-review.json`, `scope.json`, `output/report-<timestamp>.html`, and (for a
@@ -89,8 +93,8 @@ opt-in via `--with-frontend`.
   frontend framework (`react`, `react-dom`, `vue`, `@vue/*`, `next`, `nuxt`,
   `svelte`, `@sveltejs/*`, `@angular/core`, `solid-js`, `preact`) OR it holds a
   frontend bundler/framework config (`vite.config.*`, `next.config.*`,
-  `nuxt.config.*`, `svelte.config.*`, `angular.json`, or a `webpack.config.*`
-  with a browser/frontend entry). The excluded frontend source = files at or
+  `nuxt.config.*`, `svelte.config.*`, `angular.json`, or a `webpack.config.*` that
+  contains `target: 'web'` or references `HtmlWebpackPlugin`). The excluded frontend source = files at or
   under that frontend root with extensions
   `.js .jsx .ts .tsx .vue .svelte .mjs .cjs` plus the always-UI extensions
   `.css .scss .less .html`.
