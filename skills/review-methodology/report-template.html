@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Project Review — {{REPO}}</title>
+<style>
+  :root { color-scheme: light dark; }
+  body { font: 15px/1.5 system-ui, sans-serif; margin: 2rem auto; max-width: 60rem; padding: 0 1rem; }
+  h1, h2 { line-height: 1.2; }
+  .meta { color: #666; font-size: 13px; }
+  table { border-collapse: collapse; width: 100%; margin: 1rem 0; }
+  th, td { border: 1px solid #ccc; padding: 6px 9px; text-align: left; vertical-align: top; }
+  th { background: #f2f2f2; }
+  .headline { background: #eef6ff; border: 1px solid #b9d8ff; padding: 1rem; border-radius: 6px; }
+  .score { font-weight: 700; }
+  .sev-high { color: #b00020; font-weight: 700; }
+  .sev-medium { color: #b06a00; }
+  .sev-low { color: #555; }
+  details { border: 1px solid #ddd; border-radius: 6px; margin: .5rem 0; padding: .5rem .75rem; }
+  summary { cursor: pointer; font-weight: 600; }
+  code { background: #f4f4f4; padding: 0 4px; border-radius: 3px; }
+</style>
+</head>
+<body>
+<h1>Project Review</h1>
+<p class="meta">{{REPO}} @ {{COMMIT}} · mode: {{MODE}} · generated {{GENERATED_AT}}</p>
+
+<section class="headline">
+  <h2>Tech-Stack Fit (primary)</h2>
+  <p><strong>Purpose:</strong> {{PURPOSE}}</p>
+  <table>
+    <thead><tr><th>Tech</th><th>Role</th><th>Used well</th><th>Purpose fit</th><th>Rationale</th><th>Evidence</th></tr></thead>
+    <tbody>{{STACK_ROWS}}</tbody>
+  </table>
+  <p class="score">Verdict: {{STACK_VERDICT}} — score: {{STACK_SCORE}}</p>
+</section>
+
+<section>
+  <h2>Scores (secondary)</h2>
+  <table>
+    <thead><tr><th>Criterion</th><th>Score</th></tr></thead>
+    <tbody>{{CRITERIA_ROWS}}</tbody>
+  </table>
+  <p class="score">Overall: {{OVERALL_SCORE}}</p>
+</section>
+
+<section>
+  <h2>Per-file findings (secondary)</h2>
+  {{FINDINGS_BLOCKS}}
+</section>
+</body>
+</html>
