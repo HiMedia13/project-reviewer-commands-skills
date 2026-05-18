@@ -89,8 +89,8 @@ target repo URL/path; `<workdir>` default `.reviewer`):
   clickable architecture diagram (independent axis).
 - terminal summary in Korean — tech-stack-fit score (stack_score / 100) and
   verdict first; then code-quality scores for library / engineering / dead-code
-  and their mean; then the architecture score (arch_score).
-  The three axes are never combined.
+  and their mean; then the architecture score (arch_score). Any axis with no
+  verified score shows N/A. The three axes are never combined.
 - `last-review.json` — this repo's latest run only (per-slug; drives
   `/review-report` and incremental re-runs); JSON keys/enums are English by
   design.
@@ -122,6 +122,8 @@ No automated harness (this is plugin config, not application code). Verify:
 
 ## Spec & plan
 
+- v0.5.0 spec: `docs/superpowers/specs/2026-05-18-v0.5.0-architecture-diagram-design.md`
+- v0.5.0 plan: `docs/superpowers/plans/2026-05-18-v0.5.0-architecture-diagram.md`
 - v0.4.0 spec: `docs/superpowers/specs/2026-05-18-v0.4.0-isolation-frontend-depth-design.md`
 - v0.4.0 plan: `docs/superpowers/plans/2026-05-18-v0.4.0-isolation-frontend-depth.md`
 - Original spec: `docs/superpowers/specs/2026-05-18-project-reviewer-plugin-design.md`
