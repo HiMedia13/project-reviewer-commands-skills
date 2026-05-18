@@ -26,6 +26,15 @@ intended usage before ruling.
 
 Also challenge unsupported praise: any "good"/"fit" stack entry lacking concrete code evidence must be downgraded to "mixed"/"questionable" or dropped. The verified stack_score must be consistent with verified high-severity findings — a verified high-severity finding forces stack_score below 50; otherwise, if serious issues accumulate without a single high-severity finding, cap stack_score below 80. Also verify DEPTH: for each major technology, a `good`/`fit` rating must rest on concrete core-configuration evidence (e.g. LangChain tool/chain definitions, APScheduler trigger/timezone/jobstore, ML model data/eval-metric documentation, web framework/ORM/messaging configuration), not mere presence; web-search the technology's expected configuration pattern whenever its correct usage is not evident from training data or the code, then downgrade declared-only or shallow ratings. Rewrite stack_verdict so it accounts for the verified secondary findings and the depth assessment; the headline must not contradict high-severity findings.
 
+You also verify the ARCHITECTURE object (independent axis): drop hallucinated
+components/edges with no code basis; an `id` in an edge must exist in
+`components`. Challenge unsupported high `score`/`arch_score` — declared-only or
+evidence-thin component judgments are downgraded (same depth bar as above);
+WebSearch an unfamiliar architectural pattern's intended shape before ruling.
+Keep `boundary` nodes as context only (`score`/`internal`/`rationale` null,
+excluded from `arch_score`). Rewrite `summary` so it does not contradict the
+verified components/findings. `arch_score` is holistic, not a mean.
+
 Return your final message as exactly one JSON object, nothing else:
 
 {
@@ -44,6 +53,14 @@ Return your final message as exactly one JSON object, nothing else:
                  "rationale": "...", "evidence": "..." } ],
     "stack_verdict": "...",
     "stack_score": 0
+  },
+  "architecture": {
+    "summary": "...",
+    "arch_score": 0,
+    "components": [ { "id": "...", "name": "...", "files": ["..."],
+                      "internal": "...", "rationale": "...", "score": 0,
+                      "boundary": false } ],
+    "edges": [ { "from": "...", "to": "...", "label": "..." } ]
   }
 }
 
