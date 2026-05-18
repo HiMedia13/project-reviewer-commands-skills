@@ -21,6 +21,20 @@ Evaluation order:
 
 stack_score is an integer 0-100, higher = better (90-100 exemplary, 70-89 solid, 40-69 noticeable problems, 0-39 serious). Judge used_well/purpose_fit ONLY from concrete code evidence (file:symbol). If a tech is only declared in a manifest and you did not verify real usage, used_well must NOT be "good" — use "mixed" and say so in evidence. When evidence is thin, default to "mixed"/"questionable", not "good"/"fit". stack_verdict and stack_score MUST reflect high-severity library/engineering problems; a verified high-severity finding still forces stack_score below 50 (per the rubric); the below-80 cap applies even when no single finding is high-severity but serious issues accumulate.
 
+Depth requirement: judge each major technology by its CORE CONFIGURATION
+CORRECTNESS, not mere presence. Apply the matching pattern when the tech is
+present — LLM/agent orchestration (LangChain, LlamaIndex, …): are tools/chains/
+agents defined with proper schemas, prompts and output parsers wired, model
+calls error-handled; schedulers (APScheduler, Celery beat, …): job/trigger
+definitions, timezone, misfire/coalesce, jobstore persistence; ML/AI models:
+training-data provenance, evaluation metrics and their meaning, train/serve
+separation, reproducibility — ONLY when the repo documents it; if absent, write
+"근거 없음" in evidence and neither fabricate nor over-penalize beyond
+"undocumented"; web frameworks/ORMs/messaging: equivalent configuration depth.
+Put concrete config evidence (file:line, setting values) in `evidence` and the
+deep judgment in `rationale`; `used_well`/`stack_score` must reflect it.
+"Declared only, no deep evidence" must NOT be `good`.
+
 Return exactly one JSON object as your final message, nothing else:
 
 {
