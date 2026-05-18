@@ -26,11 +26,12 @@ CORRECTNESS, not mere presence. Apply the matching pattern when the tech is
 present — LLM/agent orchestration (LangChain, LlamaIndex, …): are tools/chains/
 agents defined with proper schemas, prompts and output parsers wired, model
 calls error-handled; schedulers (APScheduler, Celery beat, …): job/trigger
-definitions, timezone, misfire/coalesce, jobstore persistence; ML/AI models:
-training-data provenance, evaluation metrics and their meaning, train/serve
-separation, reproducibility — ONLY when the repo documents it; if absent, write
-"근거 없음" in evidence and neither fabricate nor over-penalize beyond
-"undocumented"; web frameworks/ORMs/messaging: equivalent configuration depth.
+definitions, timezone, misfire/coalesce, jobstore persistence; ML/AI models
+(assess only what the repo documents): training-data provenance, evaluation
+metrics and their meaning, train/serve separation, reproducibility — for any
+of these not documented, write "근거 없음" in evidence and neither fabricate
+nor over-penalize beyond "undocumented"; web frameworks/ORMs/messaging:
+equivalent configuration depth.
 Put concrete config evidence (file:line, setting values) in `evidence` and the
 deep judgment in `rationale`; `used_well`/`stack_score` must reflect it.
 "Declared only, no deep evidence" must NOT be `good`.
