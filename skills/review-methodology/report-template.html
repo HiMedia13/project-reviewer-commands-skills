@@ -28,6 +28,7 @@
   .arch-box .nm { font-weight: 600; }
   .arch-boundary { border-style: dashed; background: #f2f2f2; color: #666; cursor: default; }
   .badge { align-self: flex-start; font-size: 12px; font-weight: 700; border-radius: 10px; padding: 0 8px; }
+  .b-top { background: #bdeabd; color: #0f4f0f; }
   .b-hi { background: #d6f5d6; color: #1a6b1a; }
   .b-mid { background: #fff0cc; color: #8a5a00; }
   .b-lo { background: #ffe0e0; color: #b00020; }
@@ -103,7 +104,7 @@
         } else {
           var s=typeof c.score==='number'?c.score:null;
           var bd=document.createElement('span');
-          bd.className='badge '+(s===null?'':s>=70?'b-hi':s>=40?'b-mid':'b-lo');
+          bd.className='badge '+(s===null?'':s>=90?'b-top':s>=70?'b-hi':s>=40?'b-mid':'b-lo');
           bd.textContent=s===null?'점수 없음':(s+' / 100');
           box.appendChild(bd);
           box.addEventListener('click',function(){ show(this.getAttribute('data-id')); });
