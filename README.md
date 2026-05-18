@@ -5,10 +5,14 @@ methodology natively (no Python app). It does **not** build/run/test code — it
 asks what tech was used, whether each tech was used as designed, and whether it
 fits the project's purpose.
 
-> **v0.3.0** — fixed the 0–100 score scale and separated the tech-stack score
-> (headline) from the code-quality score (3 criteria) so they are no longer
-> averaged together; stricter evidence-based tech-stack judgment; report table
-> no longer overflows. (v0.2.0: Korean output; stored JSON stays English.)
+> **v0.4.0** — per-target isolation: every run is stored under
+> `<workdir>/<slug>/` (slug derived from the repo URL/path) so reviewing
+> multiple repos from one folder no longer collides. Default scope is now
+> **backend + AI only**; frontend is excluded via manifest signals and
+> included only with `--with-frontend`. Tech-stack rows now assess
+> per-technology configuration depth, not mere presence. (v0.3.0: fixed the
+> 0–100 score scale and separated the tech-stack score from the code-quality
+> score; v0.2.0: Korean output; stored JSON stays English.)
 
 ## Installation
 
@@ -47,26 +51,32 @@ Local checkout instead of GitHub:
   terminal summary. Spends LLM tokens.
 - `/review-scope <path|repo-url> [--with-frontend] [--max-files N]`
   Cost-free dry run: what would be evaluated and the full/incremental decision.
-- `/review-report [--workdir DIR]`
-  Cost-free: re-render the most recent result to a fresh HTML report.
+- `/review-report [target] [--workdir DIR]`
+  Cost-free: re-render a stored result (the given `target`'s, else the most
+  recent) to a fresh HTML report.
 
 ## Usage
 
 Recommended first run (check cost before spending tokens):
 
 ```
-/review-scope D:\path\to\repo                  # 0-cost: preview what gets evaluated
+/review-scope D:\path\to\repo                  # 0-cost: preview scope + slug
 /review-project D:\path\to\repo --max-files 1  # low-cost: validate the pipeline
-/review-project D:\path\to\repo                # full qualitative review
-/review-report                                 # 0-cost: re-render last result
+/review-project D:\path\to\repo                # full review (backend + AI only)
+/review-project D:\path\to\repo --with-frontend  # include the frontend too
+/review-report                                 # 0-cost: re-render newest repo
+/review-report D:\path\to\repo                 # 0-cost: re-render that repo
 ```
 
-Flags: `--with-frontend` (include UI files; backend files are never excluded
-either way) · `--force` (ignore cache, full re-eval) · `--max-files N`
-(cap evaluated files; `0` = dry run) · `--workdir DIR` (work dir, default
-`.reviewer`).
+Default scope is backend + AI only; frontend is detected via manifest signals
+(`package.json` frontend deps / bundler config) and excluded unless
+`--with-frontend` is passed. Backend / AI files (incl. `.ipynb`) are never
+excluded. Flags: `--with-frontend` (also evaluate the frontend) · `--force`
+(ignore cache, full re-eval) · `--max-files N` (cap evaluated files; `0` = dry
+run) · `--workdir DIR` (work dir, default `.reviewer`).
 
-Outputs (under the target's `<workdir>`, default `.reviewer`):
+Outputs (under `<workdir>/<slug>/`, where `slug` is derived from the
+target repo URL/path; `<workdir>` default `.reviewer`):
 
 - `output/report-<ts>.html` — self-contained Korean HTML report (no external
   requests), leading with the tech-stack-fit assessment.
@@ -82,9 +92,9 @@ The primary deliverable is a project-level tech-stack-fit assessment; per-file
 findings (`library`, `eng`, `deadcode`) are secondary. Model
 mapping: scanner + 4 agents in parallel (tech-stack-fit + 3 per-file
 criteria) on `haiku` (cheap bulk), evaluator on `sonnet` (verifies the
-primary deliverable). Results persist as `<workdir>/last-review.json`
-(latest run only) and `<workdir>/output/report-<ts>.html`. Default workdir
-`.reviewer`.
+primary deliverable, including per-technology configuration depth). Results
+persist as `<workdir>/<slug>/last-review.json` (latest run per repo only) and
+`<workdir>/<slug>/output/report-<ts>.html`. Default workdir `.reviewer`.
 
 ## Manual verification checklist
 
