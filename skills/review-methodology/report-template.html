@@ -20,6 +20,21 @@
   details { border: 1px solid #ddd; border-radius: 6px; margin: .5rem 0; padding: .5rem .75rem; }
   summary { cursor: pointer; font-weight: 600; }
   code { background: #f4f4f4; padding: 0 4px; border-radius: 3px; overflow-wrap: anywhere; white-space: pre-wrap; }
+  .arch-wrap { margin: 1rem 0; }
+  .arch-cols { display: flex; gap: 1.5rem; align-items: flex-start; overflow-x: auto; position: relative; }
+  .arch-col { display: flex; flex-direction: column; gap: .75rem; min-width: 9rem; }
+  .arch-box { font: inherit; text-align: left; cursor: pointer; border: 1px solid #b9d8ff; background: #eef6ff; border-radius: 6px; padding: .5rem .6rem; display: flex; flex-direction: column; gap: .25rem; }
+  .arch-box:hover, .arch-box:focus { outline: 2px solid #4a90d9; }
+  .arch-box .nm { font-weight: 600; }
+  .arch-boundary { border-style: dashed; background: #f2f2f2; color: #666; cursor: default; }
+  .badge { align-self: flex-start; font-size: 12px; font-weight: 700; border-radius: 10px; padding: 0 8px; }
+  .b-hi { background: #d6f5d6; color: #1a6b1a; }
+  .b-mid { background: #fff0cc; color: #8a5a00; }
+  .b-lo { background: #ffe0e0; color: #b00020; }
+  .arch-detail { margin-top: 1rem; border: 1px solid #ddd; border-radius: 6px; padding: .75rem; }
+  .arch-detail h3 { margin: 0 0 .25rem; }
+  .arch-detail .empty, .arch-cols .empty { color: #666; }
+  svg.arch-edges { position: absolute; inset: 0; pointer-events: none; overflow: visible; }
 </style>
 </head>
 <body>
@@ -36,6 +51,100 @@
   </table>
   </div>
   <p class="score">기술 스택 종합: {{STACK_VERDICT}} — 점수: {{STACK_SCORE}} / 100</p>
+</section>
+
+<section id="arch">
+  <h2>아키텍처 (독립 축)</h2>
+  <p class="meta">컴포넌트 박스를 클릭하면 내부 구성 · 구성 의도 · 점수를 봅니다. 기술 스택/코드 품질과 별개 축이며 합산하지 않음. 점선 노드는 평가 제외 맥락.</p>
+  <p><strong>요약:</strong> {{ARCH_SUMMARY}}</p>
+  <p class="score">아키텍처 점수: {{ARCH_SCORE}} / 100</p>
+  <div class="arch-wrap"><div class="arch-cols" id="arch-cols"></div></div>
+  <div class="arch-detail" id="arch-detail"><p class="empty">박스를 클릭하세요.</p></div>
+  <script type="application/json" id="arch-data">{{ARCH_DATA_JSON}}</script>
+  <script>
+  (function(){
+    var el=document.getElementById('arch-data');
+    var cols=document.getElementById('arch-cols');
+    var detail=document.getElementById('arch-detail');
+    var data; try{ data=JSON.parse(el.textContent); }catch(e){ data=null; }
+    function emptyMsg(){ cols.textContent=''; var p=document.createElement('p'); p.className='empty'; p.textContent='아키텍처 정보 없음'; cols.appendChild(p); }
+    if(!data||!data.components||!data.components.length){ emptyMsg(); return; }
+    var comps=data.components, edges=data.edges||[];
+    var byId={}; comps.forEach(function(c){ byId[c.id]=c; });
+    var depth={}, indeg={}; comps.forEach(function(c){ depth[c.id]=0; indeg[c.id]=0; });
+    edges.forEach(function(e){ if(byId[e.to]&&byId[e.from]) indeg[e.to]++; });
+    var queue=comps.filter(function(c){ return !indeg[c.id]; }).map(function(c){ return c.id; });
+    if(!queue.length) queue=[comps[0].id];
+    var seen={};
+    while(queue.length){
+      var id=queue.shift(); if(seen[id]) continue; seen[id]=1;
+      edges.forEach(function(e){
+        if(e.from===id&&byId[e.to]&&!seen[e.to]){
+          depth[e.to]=Math.max(depth[e.to],depth[id]+1); queue.push(e.to);
+        }
+      });
+    }
+    var maxd=0; comps.forEach(function(c){ if(depth[c.id]>maxd) maxd=depth[c.id]; });
+    var boxEls={};
+    for(var d=0; d<=maxd; d++){
+      var col=document.createElement('div'); col.className='arch-col';
+      comps.filter(function(c){ return depth[c.id]===d; })
+           .sort(function(a,b){ return a.id<b.id?-1:1; })
+           .forEach(function(c){
+        var box=document.createElement('button'); box.type='button';
+        box.className='arch-box'+(c.boundary?' arch-boundary':'');
+        box.setAttribute('data-id',c.id);
+        var nm=document.createElement('span'); nm.className='nm';
+        nm.textContent=c.name||c.id; box.appendChild(nm);
+        if(c.boundary){
+          var bsp=document.createElement('span'); bsp.textContent='평가 제외';
+          bsp.style.fontSize='12px'; box.appendChild(bsp);
+        } else {
+          var s=typeof c.score==='number'?c.score:null;
+          var bd=document.createElement('span');
+          bd.className='badge '+(s===null?'':s>=70?'b-hi':s>=40?'b-mid':'b-lo');
+          bd.textContent=s===null?'점수 없음':(s+' / 100');
+          box.appendChild(bd);
+          box.addEventListener('click',function(){ show(this.getAttribute('data-id')); });
+        }
+        col.appendChild(box); boxEls[c.id]=box;
+      });
+      cols.appendChild(col);
+    }
+    var svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
+    svg.setAttribute('class','arch-edges'); cols.appendChild(svg);
+    function layout(){
+      while(svg.firstChild) svg.removeChild(svg.firstChild);
+      var base=cols.getBoundingClientRect();
+      edges.forEach(function(e){
+        var a=boxEls[e.from], b=boxEls[e.to]; if(!a||!b) return;
+        var ra=a.getBoundingClientRect(), rb=b.getBoundingClientRect();
+        var ln=document.createElementNS('http://www.w3.org/2000/svg','line');
+        ln.setAttribute('x1',ra.right-base.left); ln.setAttribute('y1',ra.top-base.top+ra.height/2);
+        ln.setAttribute('x2',rb.left-base.left); ln.setAttribute('y2',rb.top-base.top+rb.height/2);
+        ln.setAttribute('stroke','#88a'); ln.setAttribute('stroke-width','1.5');
+        svg.appendChild(ln);
+      });
+    }
+    layout(); window.addEventListener('resize',layout);
+    function reset(){ detail.textContent=''; var p=document.createElement('p'); p.className='empty'; p.textContent='박스를 클릭하세요.'; detail.appendChild(p); }
+    function block(label,val){
+      var p=document.createElement('p'); var b=document.createElement('strong');
+      b.textContent=label+' '; p.appendChild(b);
+      p.appendChild(document.createTextNode(val==null||val===''?'근거 없음':val));
+      detail.appendChild(p);
+    }
+    function show(id){
+      var c=byId[id]; if(!c) return;
+      detail.textContent='';
+      var h=document.createElement('h3'); h.textContent=c.name||c.id; detail.appendChild(h);
+      block('점수:', typeof c.score==='number'?(c.score+' / 100'):'점수 없음');
+      block('내부 구성:', c.internal);
+      block('구성 의도:', c.rationale);
+    }
+    document.addEventListener('keydown',function(ev){ if(ev.key==='Escape') reset(); });
+  })();
+  </script>
 </section>
 
 <section>
