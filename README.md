@@ -5,6 +5,12 @@ methodology natively (no Python app). It does **not** build/run/test code — it
 asks what tech was used, whether each tech was used as designed, and whether it
 fits the project's purpose.
 
+> **v0.5.0** — the report now includes an independent **architecture axis**: a
+> new `review-architecture` agent infers the component structure and the report
+> draws a self-contained clickable diagram (click a component for its internal
+> composition, the inferred rationale, and its score). Architecture is scored
+> on its own and never blended into the tech-stack or code-quality scores.
+
 > **v0.4.0** — per-target isolation: every run is stored under
 > `<workdir>/<slug>/` (slug derived from the repo URL/path) so reviewing
 > multiple repos from one folder no longer collides. Default scope is now
@@ -47,7 +53,7 @@ Local checkout instead of GitHub:
 ## Commands
 
 - `/review-project <path|repo-url> [--max-files N] [--with-frontend] [--force] [--workdir DIR]`
-  Full pipeline: scanner → 4 criteria in parallel → evaluator → HTML report +
+  Full pipeline: scanner → 5 agents in parallel → evaluator → HTML report +
   terminal summary. Spends LLM tokens.
 - `/review-scope <path|repo-url> [--with-frontend] [--max-files N]`
   Cost-free dry run: what would be evaluated and the full/incremental decision.
@@ -79,10 +85,12 @@ Outputs (under `<workdir>/<slug>/`, where `slug` is derived from the
 target repo URL/path; `<workdir>` default `.reviewer`):
 
 - `output/report-<ts>.html` — self-contained Korean HTML report (no external
-  requests), leading with the tech-stack-fit assessment.
+  requests), leading with the tech-stack-fit assessment and including a
+  clickable architecture diagram (independent axis).
 - terminal summary in Korean — tech-stack-fit score (stack_score / 100) and
   verdict first; then code-quality scores for library / engineering / dead-code
-  and their mean. The two axes are never combined.
+  and their mean; then the architecture score (arch_score).
+  The three axes are never combined.
 - `last-review.json` — this repo's latest run only (per-slug; drives
   `/review-report` and incremental re-runs); JSON keys/enums are English by
   design.
@@ -90,11 +98,13 @@ target repo URL/path; `<workdir>` default `.reviewer`):
 ## How it works
 
 The primary deliverable is a project-level tech-stack-fit assessment; per-file
-findings (`library`, `eng`, `deadcode`) are secondary. Model
-mapping: scanner + 4 agents in parallel (tech-stack-fit + 3 per-file
-criteria) on `haiku` (cheap bulk), evaluator on `sonnet` (verifies the
-primary deliverable, including per-technology configuration depth). Results
-persist as `<workdir>/<slug>/last-review.json` (latest run per repo only) and
+findings (`library`, `eng`, `deadcode`) are secondary; the architecture axis is
+independent (its own score, never blended). Model mapping: scanner, then
+5 agents in parallel — tech-stack-fit + 3 per-file criteria on `haiku` (cheap
+bulk) and `review-architecture` on `sonnet` — then evaluator on `sonnet`
+(verifies the primary deliverable, including per-technology configuration depth
+and the architecture axis). Results persist as
+`<workdir>/<slug>/last-review.json` (latest run per repo only) and
 `<workdir>/<slug>/output/report-<ts>.html`. Default workdir `.reviewer`.
 
 ## Manual verification checklist
@@ -103,11 +113,12 @@ No automated harness (this is plugin config, not application code). Verify:
 
 1. `python -c "import json; json.load(open('.claude-plugin/plugin.json'))"` — manifest valid.
 2. `/review-scope` on a small local repo → prints inventory + scope, dispatches **no** subagent.
-3. `/review-project <small-repo> --max-files 1` → completes P0–P4, writes a self-contained HTML that opens with no external requests; terminal summary LEADS with the tech-stack-fit headline.
+3. `/review-project <small-repo> --max-files 1` → completes P0–P4, writes a self-contained HTML that opens with no external requests; terminal summary LEADS with the tech-stack-fit headline and also prints the code-quality and architecture axes (three separate axes, never blended).
 4. `/review-project <repo> --max-files 0` → dry run, no subagents dispatched, empty report rendered.
 5. `/review-report` with no prior run → clear, actionable error.
 6. `/review-report` after a run → re-renders that repo (bare command picks the most recently reviewed repo's `<workdir>/<slug>/last-review.json`; `/review-report <repo>` targets a specific one), zero LLM calls.
 7. Frontend exclusion is manifest-based by default (`package.json` / bundler signals); `--with-frontend` includes the frontend; backend/AI files (incl. `.ipynb`) are never excluded either way.
+8. The report's 아키텍처 section renders a clickable diagram; clicking a component shows its internal composition, rationale, and score; a component whose text contains `</script>` renders as literal text (no execution); absent architecture → "아키텍처 정보 없음", report still renders.
 
 ## Spec & plan
 
