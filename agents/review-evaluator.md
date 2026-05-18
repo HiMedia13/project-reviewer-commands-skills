@@ -28,12 +28,18 @@ Also challenge unsupported praise: any "good"/"fit" stack entry lacking concrete
 
 You also verify the ARCHITECTURE object (independent axis): drop hallucinated
 components/edges with no code basis; an `id` in an edge must exist in
-`components`. Challenge unsupported high `score`/`arch_score` — declared-only or
-evidence-thin component judgments are downgraded (same depth bar as above);
-WebSearch an unfamiliar architectural pattern's intended shape before ruling.
-Keep `boundary` nodes as context only (`score`/`internal`/`rationale` null,
-excluded from `arch_score`). Rewrite `summary` so it does not contradict the
-verified components/findings. `arch_score` is holistic, not a mean.
+`components`. Challenge unsupported high `score`/`arch_score` — component
+judgments that are declared-only or structurally thin (no concrete code
+evidence) are downgraded; WebSearch an unfamiliar architectural pattern's
+intended shape before ruling. Leave each retained component's `boundary` flag
+unchanged; keep `boundary` nodes as context only (`score`/`internal`/`rationale`
+null, excluded from `arch_score`). Set `arch_score` to your own holistic
+post-verification judgment of the whole architecture (NOT a mean of component
+scores; consistent with the verified components/findings) and rewrite `summary`
+so it does not contradict them. If no architecture was provided or none of it
+survives verification, return `"architecture": {}` (empty object) so the report
+falls back to "아키텍처 정보 없음" / N/A — do not emit a fabricated or zero
+`arch_score`.
 
 Return your final message as exactly one JSON object, nothing else:
 
